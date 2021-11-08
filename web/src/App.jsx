@@ -1,43 +1,44 @@
-import React from 'react'
-import Header from './Components/Header'
-
-import { useDispatch } from 'react-redux'
-import {amountActions} from "./state/index"
-import { bindActionCreators } from 'redux'
-import { useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import SignUpScreen from './Screen/SignUpScreen'
+import "./maincssFile.css"
+import PrivateRoute from "./config/routes"
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import LogIn from './Screen/LogIn';
+import  DashboardScreen from "./Screen/DashboardScreen"
+import ProfileScreen from './Screen/ProfileScreen';
+import axios from 'axios';
+import { BASE_URI } from './core';
 const App = () => {
-    const dispatch = useDispatch()
-    const {depositMoney , withdrawMoney} = bindActionCreators(amountActions ,dispatch)
-    const amounts = useSelector(state => state.amount)
-    return (    
+    
+    useEffect(async () => {
+        await axios.get(`${BASE_URI}/api/v1/profile` , {withCredentials : true})
+        .then(res=>console.log( "HELLO ", res))
+        .catch(err=>console.log(err))
+        console.log("HELLO WORLD");
+    }, [])
+
+    return (
         <>
-            <Header />
-       
-            <div className="container my-5">
-
-                <h4>Deposit / WithDraw Money</h4>
-
-                {/* <button className="btn btn-primary mx-3"
-                onClick={()=>dispatch(amountActions.withdrawMoney(100))}
-                >-</button> */}
-
-                <button className="btn btn-primary mx-3"
-                onClick={()=>withdrawMoney(100)}
-                >-</button>
-
-                    Update Balance {amounts}
-
-                {/* <button className="btn btn-primary mx-3"
-                onClick={()=>dispatch(amountActions.depositMoney(100))}
-                >+</button> */}
-
-                <button className="btn btn-primary mx-3"
-                onClick={()=>depositMoney(100)}
-                >+</button>
-
-
-            </div>
-       
+            <Router>
+            <Switch>
+        
+                <Route  path="/signup"  component={SignUpScreen} />
+                
+                
+                <Route exact path="/" component={LogIn} />
+                
+                <PrivateRoute component={DashboardScreen} exact path="/dashboard" />
+                <PrivateRoute component={ProfileScreen} exact path="/profile" />
+                {/* <Route exact path="/dashboard" component={DashboardScreen} /> */}
+            
+            </Switch>
+            </Router>
+                
         </>
     )
 }

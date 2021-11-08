@@ -22,7 +22,7 @@ const postSchema = mongoose.Schema({
             type : Date,
             default : Date.now
         }
-})
+} , {timeStamps : true})
 
 const signUPModel = mongoose.model("users" , SignUpSchema)
 const postModel = mongoose.model("posts" , postSchema)

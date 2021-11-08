@@ -4,16 +4,19 @@ const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
 var bcrypt = require("bcryptjs");
-
+const jwt = require("jsonwebtoken")
+const SECRET = "pakistan"
 ///SIGNUP SCHEMA///
 const {signUPModel , postModel} = require("./Schema");
 
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 ///body allow///
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser())
 
+app.use(cors({origin : "http://localhost:3000" , credentials : true} ));
 const DB_URI = `mongodb+srv://jaffaraman:jaffar12345@cluster0.agegk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 mongoose.connect(DB_URI);
 
@@ -43,8 +46,19 @@ app.post("/api/v1/signin", (req, res) => {
                     .then(response=>{
                         if(response){
                             console.log(response)
+                            const token =  jwt.sign({
+                              _id : data._id,
+                              firstName :  data.firstName,
+                              lastName : data.lastName,
+                              emailAddress : data.emailAddress
+                            } , SECRET)
+                            console.log("jwt token" , token);
+                            res.cookie("token" , token , {
+                              httpOnly : true,
+                              maxAge : 600000
+                            })
                             res.send({status:"login successfully" , data})
-                            
+
                         }else{
                             res.send("password is not match")
                             console.log("isMatch not")
@@ -131,6 +145,47 @@ app.post("/api/v1/signup", async (req, res) => {
 
 
 
+///Barrier////
+app.use((req,res,next)=>{
+  console.log( "barrier req" ,req.body)
+    jwt.verify(req.cookies.token , SECRET , 
+      function(err,decoded){
+        // console.log(decoded , "decoded");
+        req.body._decoded = decoded;
+        console.log(decoded)
+        if(!err){
+          next()
+        } else{
+          // res.status(401).sendFile(path.join(__dirname,"./web/build/index.html"))
+          console.log("error");
+        }
+
+
+    })
+})
+
+
+app.get("/api/v1/profile" , (req,res)=>{
+    console.log("PROFILE" ,req.body._decodede)
+    const emailAddress = req.body._decoded.emailAddress
+    signUPModel.findOne({emailAddress : emailAddress } , (err,data)=>{
+      try {
+          if(err){
+            throw err
+          } else{
+            res.send(data)
+            console.log("data" , data)
+          }
+      } catch (error) {
+          console.log(err);
+      }
+    })
+
+})
+
+
+
+
 app.get("/api/v1/post" , (req,res)=>{
       // const body = req.body
       // console.log(body)
@@ -141,7 +196,7 @@ app.get("/api/v1/post" , (req,res)=>{
                 throw err
               }else{
                 res.send(data)
-                console.log(data);
+                // console.log(data);
               }
           })
 
