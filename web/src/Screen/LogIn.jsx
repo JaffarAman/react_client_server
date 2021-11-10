@@ -8,13 +8,15 @@ import * as Yup from "yup";
 import { Link , useHistory } from "react-router-dom";
 import axios from "axios";
 import {BASE_URI} from "../core"
-
+import { useDispatch } from 'react-redux'
+import { LoginActions } from "../Redux";
 const LogIn = () => {
   // const history = useHistory()
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null)
   const [errorBoxClass , setErrorBoxClass ] = useState("errorBOx")
   const history =  useHistory() 
+  const  dispatch = useDispatch()
   const validate = Yup.object({
     emailAddress: Yup.string()
       .required("Required")
@@ -42,7 +44,9 @@ const LogIn = () => {
         setLoading(false);
         if(res.data.status == "login successfully"){
             localStorage.setItem("data",JSON.stringify(res.data.data))
-          history.replace("/dashboard")
+            dispatch(LoginActions.LoginAction(res.data.data))
+            history.replace("/dashboard")
+
         }else{
             setErrorMsg(res.data)
             setErrorBoxClass("errorBOx show")

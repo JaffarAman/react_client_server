@@ -15,9 +15,9 @@ const DashboardScreen = () => {
   const [icon , setIcon] = useState("fas fa-sun")
   const [darkTheme , setDarkTheme] = useState(false)
 
-  console.log(checkHandle)
-  console.log("index =>>" ,indexNum)
-  console.log(user);
+  // console.log(checkHandle)
+  // console.log("index =>>" ,indexNum)
+  // console.log(user);
   
     useEffect(async ()=>{
         await axios.get(`${BASE_URI}/api/v1/post` , {
@@ -172,7 +172,7 @@ const DashboardScreen = () => {
 
       <section className="row m-0">
         {post.map((val, ind) => {
-            console.log(val.privatePost)
+            // console.log(val.privatePost)
               
               return (
                   

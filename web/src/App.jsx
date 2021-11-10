@@ -6,18 +6,24 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Redirect
 } from "react-router-dom";
 import LogIn from './Screen/LogIn';
 import  DashboardScreen from "./Screen/DashboardScreen"
 import ProfileScreen from './Screen/ProfileScreen';
 import axios from 'axios';
 import { BASE_URI } from './core';
+import { useDispatch } from 'react-redux';
+import { LoginActions } from './Redux';
 const App = () => {
+    const dispatch = useDispatch()
     
     useEffect(async () => {
         await axios.get(`${BASE_URI}/api/v1/profile` , {withCredentials : true})
-        .then(res=>console.log( "HELLO ", res))
+        .then(res=>{
+            console.log("hello",res)
+            dispatch(LoginActions.LoginAction(res.data))
+        })
         .catch(err=>console.log(err))
         console.log("HELLO WORLD");
     }, [])
@@ -25,7 +31,10 @@ const App = () => {
     return (
         <>
             <Router>
-            <Switch>
+
+
+
+                <Switch>
         
                 <Route  path="/signup"  component={SignUpScreen} />
                 
@@ -33,7 +42,12 @@ const App = () => {
                 <Route exact path="/" component={LogIn} />
                 
                 <PrivateRoute component={DashboardScreen} exact path="/dashboard" />
+                
                 <PrivateRoute component={ProfileScreen} exact path="/profile" />
+
+                <Route  path="*">
+                    <Redirect to="/" />
+                </Route>
                 {/* <Route exact path="/dashboard" component={DashboardScreen} /> */}
             
             </Switch>

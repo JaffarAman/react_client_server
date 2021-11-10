@@ -1,12 +1,19 @@
+import axios from 'axios'
 import React from 'react'
 import { Navbar , Nav} from "react-bootstrap"
 import { useHistory } from 'react-router'
-import UseSwitchesCustom from './ThemeIcon'
+import { BASE_URI } from '../../core'
 const NavbarApp = ({icon, changeTheme}) => {
   const history = useHistory()
   const logout =()=>{
+      
+      axios.post(`${BASE_URI}/api/v1/logout` , {},{withCredentials : true})
+      .then(res=>console.log( "LOGOUT",res))
+      .catch(err=>console.log(err))
+      
+      
       localStorage.removeItem("data")
-      history.replace('/')
+      // history.replace('/')
   }
   const profile =()=>{
     history.replace('/profile')

@@ -165,6 +165,17 @@ app.use((req,res,next)=>{
 })
 
 
+///logout apii//
+app.post("/api/v1/logout" , (req,res)=>{
+        
+        res.cookie("token" , "" , {
+          httpOnly : true,
+          maxAge : 30000
+        })
+        res.send("LOGOUT API HIT")
+})
+
+
 app.get("/api/v1/profile" , (req,res)=>{
     console.log("PROFILE" ,req.body._decodede)
     const emailAddress = req.body._decoded.emailAddress

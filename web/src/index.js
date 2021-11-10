@@ -4,12 +4,16 @@ import './index.css';
 import App from './App.jsx';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import store from "./Redux/store"
+import { Provider } from 'react-redux';
 ReactDOM.render(
   <React.StrictMode>
-
+    <Provider store={store}>
       
       <App />
+
+    </Provider>
+      
 
 
     
