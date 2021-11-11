@@ -1,5 +1,5 @@
 const INITIAL_STATE = {
-        user : null    
+        user : undefined    
 }
 
 export const  LoginReducer   = (state = INITIAL_STATE , action)=>{

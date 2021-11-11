@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser())
 
-app.use(cors({origin : "http://localhost:3000" , credentials : true} ));
+app.use(cors({origin : "http://localhost:3001" , credentials : true} ));
 const DB_URI = `mongodb+srv://jaffaraman:jaffar12345@cluster0.agegk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 mongoose.connect(DB_URI);
 
@@ -55,7 +55,7 @@ app.post("/api/v1/signin", (req, res) => {
                             console.log("jwt token" , token);
                             res.cookie("token" , token , {
                               httpOnly : true,
-                              maxAge : 600000
+                              maxAge : 600000000
                             })
                             res.send({status:"login successfully" , data})
 
@@ -156,8 +156,8 @@ app.use((req,res,next)=>{
         if(!err){
           next()
         } else{
-          // res.status(401).sendFile(path.join(__dirname,"./web/build/index.html"))
-          console.log("error");
+          res.status(401).sendFile(path.join(__dirname,"./web/build/index.html"))
+          // console.log("error");
         }
 
 
@@ -200,6 +200,8 @@ app.get("/api/v1/profile" , (req,res)=>{
 app.get("/api/v1/post" , (req,res)=>{
       // const body = req.body
       // console.log(body)
+      const page = Number(req.query.page)
+      console.log("page" , page);
       try {
 
           postModel.find({} , (err,data)=>{
@@ -209,7 +211,7 @@ app.get("/api/v1/post" , (req,res)=>{
                 res.send(data)
                 // console.log(data);
               }
-          })
+          } ).sort({ created : "desc" }).skip(page).limit(5)
 
       } catch (error) {
         
@@ -236,7 +238,7 @@ app.post("/api/v1/post" , (req,res)=>{
                 res.send("SUCCESSFFULLY YOUR POST IS CREATE")
                 console.log(data)
              }
-           }) 
+           })
 
 
         } catch (error) {

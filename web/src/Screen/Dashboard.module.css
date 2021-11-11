@@ -52,3 +52,24 @@
 .postBtns button{
     margin: 0 5px;
 }
+.loadMoreBtnBox{
+    margin: 30px 0 10px 0;
+    /* border: 1px solid red; */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.loadMoreBtnBox button{
+    width: 150px;
+    border-radius: 5px ;
+    border: 2px solid #09DEEA;
+    outline: none;
+    padding: 8px;
+    color: black;
+    font-weight: bold;
+}
+.loadMoreBtnBox button:hover{
+    background-color: #09DEEA;
+    transition: all 0.8s ease;
+
+}

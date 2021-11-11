@@ -8,7 +8,7 @@ export const SignupAction = (data)=>{
 }
 
 export const LoginAction = (data)=>{
-    console.log("redux data", data);
+    // console.log("redux data", data);
     return (dispatch)=>[
 
                 dispatch({

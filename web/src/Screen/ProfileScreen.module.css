@@ -1,0 +1,77 @@
+.profileMainBox{
+    /* border: 1px solid red; */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    /* background-color: #E0EAFC; */
+    
+}
+.profileBox{
+    /* border: 1px solid blue; */
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 19px 0px;
+    width: 50%;
+    padding: 10px 20px;
+    word-wrap: break-word;
+}
+.userNameHead{
+  
+    margin: 10px 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    
+}
+.userNameHead h1{
+    
+    margin: 0;
+}
+.userNameHead small{
+    font-size: large;
+    display: block;
+   
+    margin: 0 10px;
+}
+.userDetails li{
+    list-style: none;
+    border-bottom:2px solid lightgrey ;
+    margin: 15px 0;
+    font-size: medium;
+    /* color: gray; */
+    padding: 5px;
+}
+.userDetails li small{
+    font-size: medium;
+    margin-right: 10px;
+}
+.userDetails{
+    width: 100%;
+    margin: 10px 0;
+    /* border: 1px solid lime; */
+}
+.profilebtns{
+    width: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+.profilebtns button{
+        width: 120px;
+        padding: 7px;
+        /* border: none; */
+        outline: none;
+        border-radius: 8px;
+        font-size: small;
+}
+.profilebtnsFC{
+    border: 1px solid #09DEEA;
+    background-color: none;
+}
+.profilebtnsLC{
+        border: none;
+        background-color: #09DEEA;
+        color: black;
+        font-weight: bold;
+}

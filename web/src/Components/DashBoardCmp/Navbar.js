@@ -10,10 +10,8 @@ const NavbarApp = ({icon, changeTheme}) => {
       axios.post(`${BASE_URI}/api/v1/logout` , {},{withCredentials : true})
       .then(res=>console.log( "LOGOUT",res))
       .catch(err=>console.log(err))
-      
-      
       localStorage.removeItem("data")
-      // history.replace('/')
+      history.replace('/')
   }
   const profile =()=>{
     history.replace('/profile')

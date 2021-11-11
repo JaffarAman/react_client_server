@@ -5,6 +5,7 @@ import styles from "./Dashboard.module.css";
 import axios from "axios"
 import {BASE_URI} from "../core"
 import SwitchesSize from "../Components/Switch"
+import SplashScreen from "../Screen/SplashScreen"
 
 const DashboardScreen = () => {
   const [inputValue, setInputValue] = useState("");
@@ -14,13 +15,13 @@ const DashboardScreen = () => {
   const [checkHandle , setCheckHandle] = useState(false)
   const [icon , setIcon] = useState("fas fa-sun")
   const [darkTheme , setDarkTheme] = useState(false)
-
+  const [loadIsMore , setLoadIsMore] = useState(false)
   // console.log(checkHandle)
   // console.log("index =>>" ,indexNum)
   // console.log(user);
   
     useEffect(async ()=>{
-        await axios.get(`${BASE_URI}/api/v1/post` , {
+        await axios.get(`${BASE_URI}/api/v1/post?page=0` , {
         withCredentials : true
 
         })
@@ -32,22 +33,7 @@ const DashboardScreen = () => {
           console.log(err)
         })
     } , [postSend])
-  const [post, setPost] = useState([
-    {
-      userName: "Jaff",
-      postCapture:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis, culpa.",
-      date: "1/11/2021",
-      uid: "12345",
-    },
-    {
-      userName: "Jaffar",
-      postCapture:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis, culpa.",
-      date: "10/11/2021",
-      uid: "12345",
-    },
-  ]);
+  const [post, setPost] = useState([]);
 
   // console.log(post);
   // console.log('post arhi hai , ' + )
@@ -138,11 +124,34 @@ const DashboardScreen = () => {
 
     }
    }
+
+   const loadMore = ()=>{
+    console.log("l;oad");
+      axios.get(`${BASE_URI}/api/v1/post?page=${post.length}` , {withCredentials : true})
+      .then(res=>{
+
+          if(res.data?.length){
+              const newPosts = [...post , ...res.data]
+              setPost(newPosts)
+            }else{
+                console.log("end hogayi length");
+                setLoadIsMore(true)
+            }
+
+
+      })
+      .catch((err)=>{
+        console.log(err);
+      })
+
+   }
   return (
     <div className={`w-100 ${styles.dashBoardMainBox}`} style={{backgroundColor : darkTheme ? "#343a40" : '#E0EAFC' }} >
       {/* <h1>Dashboard Screen</h1> */}
       <NavbarApp icon={icon} changeTheme={changeTheme}/>
-
+  {  
+    post.length ?
+  <>
       <div className={`${styles.postSectionBox}`}>
         <div className={darkTheme? `${styles.postBox} ${styles.postBoxDark}` : styles.postBox }>
           <section className={styles.postCardHeading}>
@@ -215,7 +224,17 @@ const DashboardScreen = () => {
             
           
         })}
+        {!loadIsMore ? 
+    <div className={styles.loadMoreBtnBox}>
+
+          <button className={styles.loadMoreBtn} onClick={()=>loadMore()}>Load More</button>
+
+  
+    </div> : null
+        }
       </section>
+    </> : <SplashScreen />}
+
     </div>
   );
 };
