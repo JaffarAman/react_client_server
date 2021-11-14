@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 var bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken")
 const SECRET = "pakistan"
+const createServer = require("http")
+const socket = require("socket.io")
 ///SIGNUP SCHEMA///
 const {signUPModel , postModel} = require("./Schema");
 
@@ -304,5 +306,7 @@ mongoose.connection.on("connected", () => console.log("mongoose connected"));
 mongoose.connection.on("error", (error) =>
   console.log("mongoose error", error)
 );
-app.listen(PORT, () => console.log(`Server is Running on localhost:${PORT} `));
+
+const server = createServer(app)
+// app.listen(PORT, () => console.log(`Server is Running on localhost:${PORT} `));
     
