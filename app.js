@@ -6,8 +6,8 @@ const mongoose = require("mongoose");
 var bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken")
 const SECRET = "pakistan"
-const createServer = require("http")
-const socket = require("socket.io")
+const http = require("http")
+const {Server} = require("socket.io")
 ///SIGNUP SCHEMA///
 const {signUPModel , postModel} = require("./Schema");
 
@@ -307,6 +307,33 @@ mongoose.connection.on("error", (error) =>
   console.log("mongoose error", error)
 );
 
-const server = createServer(app)
-// app.listen(PORT, () => console.log(`Server is Running on localhost:${PORT} `));
+const server = http.createServer(app)
+
+
+const io = new Server(server , {cors : {origin : "*" , methods : '*'}})
+
+io.on("connection" , (socket)=>{
+    console.log("New client connected with id: " , socket.id);
+
+    socket.emit("topic 1 " , "some data")
+
+    socket.on("disconnet" , (message)=>{
+      console.log("Client disconnected with id:" , message.id)
+    })
+
+
+})
+
+
+setInterval(() => {
+  
+
+    io.emit("Test Topic " , {event : "ADDED_ITEM" , data:"some data"})
+    console.log("emiting data to all client");
+
+
+}, 2000);
+
+
+server.listen(PORT, () => console.log(`Server is Running on localhost:${PORT} `));
     
