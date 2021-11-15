@@ -18,7 +18,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser())
 
-app.use(cors({origin : "http://localhost:3001" , credentials : true} ));
+app.use(cors({origin : "http://localhost:3000" , credentials : true} ));
+
 const DB_URI = `mongodb+srv://jaffaraman:jaffar12345@cluster0.agegk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 mongoose.connect(DB_URI);
 
@@ -206,14 +207,15 @@ app.get("/api/v1/post" , (req,res)=>{
       console.log("page" , page);
       try {
 
-          postModel.find({} , (err,data)=>{
+          postModel.find({}  , (err,data)=>{
               if(err){
                 throw err
               }else{
                 res.send(data)
                 // console.log(data);
               }
-          } ).sort({ created : "desc" }).skip(page).limit(5)
+          } ).sort({created_on: 'desc'})
+          .skip(page).limit(5)
 
       } catch (error) {
         
@@ -237,11 +239,20 @@ app.post("/api/v1/post" , (req,res)=>{
              if(err){
                throw err
              }else{
+               // console.log(data)
+               io.emit("POST" , {
+                 userId : body.userId,
+                 userName : body.userName,
+                 postCapture : body.postCapture,
+                 date : body.date,
+                 privatePost : body.privatePost
+                }
+                )
                 res.send("SUCCESSFFULLY YOUR POST IS CREATE")
-                console.log(data)
              }
            })
 
+          
 
         } catch (error) {
             console.log(error);
@@ -310,6 +321,8 @@ mongoose.connection.on("error", (error) =>
 const server = http.createServer(app)
 
 
+
+///socket io ////
 const io = new Server(server , {cors : {origin : "*" , methods : '*'}})
 
 io.on("connection" , (socket)=>{
@@ -325,14 +338,14 @@ io.on("connection" , (socket)=>{
 })
 
 
-setInterval(() => {
+// setInterval(() => {
   
+//     io.emit("Test Topic " , {event : "ADDED_ITEM" , data:"some data"})
+//     console.log("emiting data to all client");
 
-    io.emit("Test Topic " , {event : "ADDED_ITEM" , data:"some data"})
-    console.log("emiting data to all client");
 
+// }, 2000);
 
-}, 2000);
 
 
 server.listen(PORT, () => console.log(`Server is Running on localhost:${PORT} `));
