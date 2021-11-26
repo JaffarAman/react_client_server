@@ -1,31 +1,60 @@
-import React from "react"
-import BatingScreen from "./Components/BatingScreen";
-import Form from "./Screen/Form";
+import React, { useEffect } from 'react'
+import SignUpScreen from './Screen/SignUpScreen'
+import "./maincssFile.css"
+import PrivateRoute from "./config/routes"
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Redirect
 } from "react-router-dom";
-import AdminDashBoard from "./Screen/AdminDashBoard";
-function App() {
-  return (
-    <div style={{width:"100%"}}>
+import LogIn from './Screen/LogIn';
+import  DashboardScreen from "./Screen/DashboardScreen"
+import ProfileScreen from './Screen/ProfileScreen';
+import axios from 'axios';
+import { BASE_URI } from './core';
+import { useDispatch } from 'react-redux';
+import { LoginActions } from './Redux';
+const App = () => {
+    const dispatch = useDispatch()
+    
+    useEffect(async () => {
+        await axios.get(`${BASE_URI}/api/v1/profile` , {withCredentials : true})
+        .then(res=>{
+            console.log("hello",res)
+            dispatch(LoginActions.LoginAction(res.data))
+        })
+        .catch(err=>console.log(err))
+        console.log("HELLO WORLD");
+    }, [])
 
-      <Switch>
-        <Route  path="/" exact  component={ BatingScreen }>
-       
-        </Route>
-        <Route path="/adminpanel" component={Form}>
-        </Route>
-        <Route  path="/matchDet"  component={AdminDashBoard} />
-        </Switch>
+    return (
+        <>
+            <Router>
 
 
-    {/* <BatingScreen /> */}
-    {/* <Form /> */}
-    </div>
-  );
+
+                <Switch>
+        
+                <Route  path="/signup"  component={SignUpScreen} />
+                
+                
+                <Route exact path="/" component={LogIn} />
+                
+                <PrivateRoute component={DashboardScreen} exact path="/dashboard" />
+                
+                <PrivateRoute component={ProfileScreen} exact path="/profile" />
+
+                <Route  path="*">
+                    <Redirect to="/" />
+                </Route>
+                {/* <Route exact path="/dashboard" component={DashboardScreen} /> */}
+            
+            </Switch>
+            </Router>
+                
+        </>
+    )
 }
 
-export default App;
+export default App
