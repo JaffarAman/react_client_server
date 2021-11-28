@@ -8,11 +8,16 @@ const jwt = require("jsonwebtoken")
 const SECRET = "pakistan"
 const http = require("http")
 const {Server} = require("socket.io")
+const fs = require("fs")
+const cloudinary = require("cloudinary")
+const multer = require("multer")
 ///SIGNUP SCHEMA///
 const {signUPModel , postModel} = require("./Schema");
 
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+require('dotenv').config()
+require("./cloudinary/cloudinary")
 ///body allow///
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -308,6 +313,35 @@ app.delete("/api/v1/post/:id" , (req,res)=>{
 })
 
 
+/*multer({
+    storage : multer.diskStorage(),
+    fileFilter : (req,res,cb)=>{
+        if(file.mimetype.match(/jpag|jpg|png|gif$i/)){
+            cb(null , true)
+        }
+    }
+ })*/
+
+
+//  const storage = multer.diskStorage({
+//   destination : "./uploads/",
+//   fileName : function(req,file,cb){
+//     cb(null , `${new Date().getTime()}-${file.fileName}.${file.mimetype.split["/"][1]}}`  )
+//   }
+// })
+
+// var upload =  multer({storage : storage})
+
+
+// app.post("/upload" , upload.any() , async (req,res)=>{
+//       console.log(req.files[0].path)
+//        const result = await cloudinary.v2.uploader.upload(req.files[0].path)      
+//         .then(data=>{res.send(data) , fs.unlinkSync(req.files[0].path)})
+//         .catch(err=>{
+//             res.send(err)
+//         })
+// })
+
 
 app.get("/**", (req, res) => {
   res.redirect("/");
@@ -331,7 +365,7 @@ io.on("connection" , (socket)=>{
     socket.emit("topic 1 " , "some data")
 
     socket.on("disconnet" , (message)=>{
-      console.log("Client disconnected with id:" , message.id)
+      console.log("Client disconnected with id:" , message)
     })
 
 

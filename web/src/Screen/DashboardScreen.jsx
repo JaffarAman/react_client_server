@@ -48,18 +48,20 @@ const DashboardScreen = () => {
         console.log("disconnected from server" , message)
     })
 
-    // socket.on("POST" , function (data){
-    //     console.log("socket data" , data);
-    //     setPost( (prev)=> [data , ...post]  )
-    //   })
+    socket.on("POST" , function (data){
+        console.log("socket data" , data);
+        setPost( (prev)=> [data , ...prev]  )
+      })
+    console.log("useEffect socket");
+    
     return () => {
       socket.close()
     }
+    
 
   }, [])
 
     
-  // console.log(post);
   // console.log('post arhi hai , ' + )
 
   const addPost = async () => {

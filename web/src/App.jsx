@@ -15,6 +15,7 @@ import axios from 'axios';
 import { BASE_URI } from './core';
 import { useDispatch } from 'react-redux';
 import { LoginActions } from './Redux';
+import ImageCheck from './Components/ImageCheck';
 const App = () => {
     const dispatch = useDispatch()
     
@@ -45,6 +46,7 @@ const App = () => {
                 
                 <PrivateRoute component={ProfileScreen} exact path="/profile" />
 
+                <Route path="/image" component={ImageCheck} />
                 <Route  path="*">
                     <Redirect to="/" />
                 </Route>
